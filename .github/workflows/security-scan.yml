@@ -1,0 +1,27 @@
+name: security-scan
+
+# Eats own dogfood: oss-twin runs in its own CI via the same stack it
+# documents for other repos. Calls the reusable workflow at
+# creatornader/oss-security-scan for typos + gitleaks + trufflehog +
+# osv-scanner.
+#
+# All run: blocks use no github.event.* inputs.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 9 * * 0'
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+
+jobs:
+  scan:
+    uses: creatornader/oss-security-scan/.github/workflows/oss-security-scan.yml@v0.1.0
+    with:
+      run-osv-scanner: ${{ github.event_name == 'schedule' }}
