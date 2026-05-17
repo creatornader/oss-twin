@@ -111,14 +111,14 @@ oss-twin is one layer of a three-tool stack for maintaining public OSS repos wit
 | Tool | Concern | When to install |
 |---|---|---|
 | [**leakguard**](https://github.com/creatornader/leakguard) | Narrative-leak detection in file CONTENT (prose patterns, codenames) | Anywhere you write prose that could leak operator-internal context |
-| **oss-twin** (this tool) | Structural mirror gate — fails if any path declared private exists in the public tree | When you have a `*-internal` mirror repo |
+| **oss-twin** (this tool) | Structural mirror gate that fails if any path declared private exists in the public tree | When you have a `*-internal` mirror repo |
 | [**oss-security-scan**](https://github.com/creatornader/oss-security-scan) | Reusable GitHub Actions workflow (typos + gitleaks + trufflehog + osv-scanner) | Every public OSS repo |
 
 For the full stack wire-up pattern (one repo, all three tools), see [`oss-security-scan/examples/full-stack-starter/`](https://github.com/creatornader/oss-security-scan/tree/main/examples/full-stack-starter).
 
 ## Note for repos with prose linters
 
-`.oss-twin.yaml` lists private paths as YAML VALUES (e.g. `private_paths: [docs/handoffs/, ...]`). The whole job of this config is to enumerate those paths so oss-twin can guard them. If your repo also runs a prose linter (Vale, an LLM-based audit, etc.), exempt `.oss-twin.yaml` from those scanners — otherwise the linter will flag the path strings as private-material references and propose renames that would break the tool. Same applies to [`leakguard.yaml`](https://github.com/creatornader/leakguard).
+`.oss-twin.yaml` lists private paths as YAML VALUES (e.g. `private_paths: [docs/handoffs/, ...]`). The whole job of this config is to enumerate those paths so oss-twin can guard them. If your repo also runs a prose linter (Vale, an LLM-based audit, etc.), exempt `.oss-twin.yaml` from those scanners. Otherwise the linter will flag the path strings as private-material references and propose renames that would break the tool. Same applies to [`leakguard.yaml`](https://github.com/creatornader/leakguard).
 
 ## License
 
