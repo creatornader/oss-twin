@@ -1,0 +1,29 @@
+# Dependabot config for oss-twin.
+#
+# Tracks two ecosystems:
+# 1. github-actions — weekly grouped PR for action version drift,
+#    matching the pattern across the rest of the OSS stack
+# 2. pip — Python package security updates for pyyaml and pytest
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps"
+    groups:
+      python-deps:
+        patterns:
+          - "*"
