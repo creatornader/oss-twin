@@ -33,7 +33,7 @@ sensitive for public surface.
 ## Cross-repo links
 
 - Public repo: see `.oss-twin.yaml` in that repo for the mirror configuration
-- Leak-class catalog: https://github.com/creatornader/leakguard
+- Leak-class catalog: https://github.com/creatornader/textleaks
 """
 
 README_TEMPLATE = """# {name}

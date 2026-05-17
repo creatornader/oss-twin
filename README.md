@@ -4,7 +4,7 @@ Keep a public OSS repo and its private mirror structurally aligned.
 
 Many OSS maintainers run a private sister repo alongside their public one (atrib + atrib-internal, foo + foo-internal). The private repo holds operator memory, design specs with rejected alternatives, vendor IDs, deploy notes, and anything else that shouldn't be public but is too valuable to lose to git history archaeology. **oss-twin manages the boundary**: it scaffolds the mirror, gates the public repo against private paths leaking back in, and moves files cleanly across the boundary when you decide something needs to be private.
 
-It pairs with [`leakguard`](https://github.com/creatornader/leakguard) (catches narrative leaks in file CONTENT) and the usual credential scanners (gitleaks, trufflehog). oss-twin owns the structural side: file LOCATION, not file content.
+It pairs with [`textleaks`](https://github.com/creatornader/textleaks) (catches narrative leaks in file CONTENT) and the usual credential scanners (gitleaks, trufflehog). oss-twin owns the structural side: file LOCATION, not file content.
 
 ## Install
 
@@ -90,10 +90,10 @@ oss-twin check                 # exits 1 if any private path leaked back in
 ## What this is NOT
 
 - **Not a sync tool.** It doesn't bidirectionally keep two repos in lockstep. `move` is one-shot and explicit.
-- **Not a content scanner.** Use [leakguard](https://github.com/creatornader/leakguard) for narrative-leak detection in file content.
+- **Not a content scanner.** Use [textleaks](https://github.com/creatornader/textleaks) for narrative-leak detection in file content.
 - **Not a credential scanner.** Use gitleaks + trufflehog for that.
 - **Not a history rewriter.** If a private file already landed in public history, use `git-filter-repo` to scrub it (and consider deleting + recreating the GitHub repo to expunge PR refs).
-- **Not a workflow orchestrator.** Each tool above stays focused. If you want a manifest that declares "for this repo, run leakguard + oss-twin + gitleaks + osv-scanner at these phases," that's a separate layer (not built yet).
+- **Not a workflow orchestrator.** Each tool above stays focused. If you want a manifest that declares "for this repo, run textleaks + oss-twin + gitleaks + osv-scanner at these phases," that's a separate layer (not built yet).
 
 ## Roadmap
 
@@ -110,7 +110,7 @@ oss-twin is one layer of a three-tool stack for maintaining public OSS repos wit
 
 | Tool | Concern | When to install |
 |---|---|---|
-| [**leakguard**](https://github.com/creatornader/leakguard) | Narrative-leak detection in file CONTENT (prose patterns, codenames) | Anywhere you write prose that could leak operator-internal context |
+| [**textleaks**](https://github.com/creatornader/textleaks) | Narrative-leak detection in file CONTENT (prose patterns, codenames) | Anywhere you write prose that could leak operator-internal context |
 | **oss-twin** (this tool) | Structural mirror gate that fails if any path declared private exists in the public tree | When you have a `*-internal` mirror repo |
 | [**oss-security-scan**](https://github.com/creatornader/oss-security-scan) | Reusable GitHub Actions workflow (typos + gitleaks + trufflehog + osv-scanner) | Every public OSS repo |
 
@@ -118,7 +118,7 @@ For the full stack wire-up pattern (one repo, all three tools), see [`oss-securi
 
 ## Note for repos with prose linters
 
-`.oss-twin.yaml` lists private paths as YAML VALUES (e.g. `private_paths: [docs/handoffs/, ...]`). The whole job of this config is to enumerate those paths so oss-twin can guard them. If your repo also runs a prose linter (Vale, an LLM-based audit, etc.), exempt `.oss-twin.yaml` from those scanners. Otherwise the linter will flag the path strings as private-material references and propose renames that would break the tool. Same applies to [`leakguard.yaml`](https://github.com/creatornader/leakguard).
+`.oss-twin.yaml` lists private paths as YAML VALUES (e.g. `private_paths: [docs/handoffs/, ...]`). The whole job of this config is to enumerate those paths so oss-twin can guard them. If your repo also runs a prose linter (Vale, an LLM-based audit, etc.), exempt `.oss-twin.yaml` from those scanners. Otherwise the linter will flag the path strings as private-material references and propose renames that would break the tool. Same applies to [`textleaks.yaml`](https://github.com/creatornader/textleaks).
 
 ## License
 
