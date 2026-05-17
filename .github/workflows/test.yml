@@ -25,6 +25,11 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Configure git (tests scaffold git repos that need an identity)
+        run: |
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI"
+          git config --global init.defaultBranch main
       - name: Install
         run: pip install -e ".[dev]"
       - name: Run pytest
