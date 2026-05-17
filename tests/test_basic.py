@@ -34,8 +34,20 @@ def test_check_passes_when_no_private_paths_exist(public_repo, tmp_path):
 def test_check_fails_when_private_path_exists(public_repo, tmp_path):
     (public_repo / "docs" / "handoffs").mkdir(parents=True)
     (public_repo / "docs" / "handoffs" / "secret.md").write_text("operator-only stuff")
+    # git-add so the file is tracked; check only considers tracked files
+    subprocess.run(["git", "add", "-A"], cwd=public_repo, check=True)
     config = _make_config(public_repo, tmp_path / "mirror", private_paths=["docs/handoffs/"])
     assert check_cmd.run(config) == 1
+
+
+def test_check_ignores_gitignored_files(public_repo, tmp_path):
+    """A path matching a private rule but gitignored should NOT trip check."""
+    (public_repo / ".remember").mkdir()
+    (public_repo / ".remember" / "today.md").write_text("operator-only")
+    (public_repo / ".gitignore").write_text(".remember/\n")
+    subprocess.run(["git", "add", "-A"], cwd=public_repo, check=True)
+    config = _make_config(public_repo, tmp_path / "mirror", private_paths=[".remember/"])
+    assert check_cmd.run(config) == 0
 
 
 def test_init_scaffolds_mirror_with_claude_md(public_repo, tmp_path):
@@ -84,6 +96,7 @@ def test_status_reports_leaks(public_repo, tmp_path, capsys):
     mirror = tmp_path / "mirror"
     (public_repo / "docs" / "handoffs").mkdir(parents=True)
     (public_repo / "docs" / "handoffs" / "x.md").write_text("x")
+    subprocess.run(["git", "add", "-A"], cwd=public_repo, check=True)
     config = _make_config(public_repo, mirror, private_paths=["docs/handoffs/"])
 
     rc = status_cmd.run(config)
