@@ -8,9 +8,13 @@ It pairs with [`textleaks`](https://github.com/creatornader/textleaks) (catches 
 
 ## Install
 
+Install directly from GitHub (PyPI publication pending — the name is reserved on PyPI but the package is not yet uploaded):
+
 ```sh
-pip install oss-twin
+pip install "git+https://github.com/creatornader/oss-twin.git@v0.1.1"
 ```
+
+Or run as a `pre-commit` hook (see below). The pre-commit framework handles the install for you.
 
 ## Use
 
