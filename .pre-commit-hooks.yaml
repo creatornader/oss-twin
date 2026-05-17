@@ -1,0 +1,7 @@
+- id: oss-twin-check
+  name: oss-twin check
+  description: Fail if any private_paths exist in the public tree
+  entry: oss-twin check
+  language: python
+  pass_filenames: false
+  always_run: true
