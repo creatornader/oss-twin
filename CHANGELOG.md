@@ -4,6 +4,12 @@ All notable changes to oss-twin are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Dropped Python 3.9, which reached end of life in October 2025. `requires-python` is now `>=3.10`, and CI tests 3.10 through 3.13. GitHub's `ubuntu-latest` runner (Ubuntu 26.04) no longer provides Python 3.9.
+
 ## [0.1.1] - 2026-05-17
 
 ### Fixed
